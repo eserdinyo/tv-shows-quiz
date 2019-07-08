@@ -1,18 +1,24 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container mx-auto mt-10">
+    <Show v-for="show in shows" :show="show" :key="show.name" />
   </div>
 </template>
 
 <script>
+import Show from "@/components/Show";
+import { shows } from "@/dummy";
+
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
 
 export default {
-  name: 'home',
-  components: {
-    HelloWorld,
+  name: "home",
+  data() {
+    return {
+      shows
+    };
   },
+  components: {
+    Show
+  }
 };
 </script>
