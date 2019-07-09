@@ -6,7 +6,7 @@
 
 <script>
 import Show from "@/components/Show";
-import { shows } from "@/dummy";
+import http from "@/http";
 
 // @ is an alias to /src
 
@@ -14,11 +14,16 @@ export default {
   name: "home",
   data() {
     return {
-      shows
+      shows: []
     };
   },
   components: {
     Show
+  },
+  created() {
+    http.get("/shows").then(res => {
+      this.shows = res.data;
+    });
   }
 };
 </script>

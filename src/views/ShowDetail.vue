@@ -2,16 +2,16 @@
   <div>
     <div
       class="h-screen"
-      :style="{'background': `linear-gradient(rgba(0, 0, 0, 0.8),rgba(0, 0, 0, 0.8)), url(${show.bg})`}"
+      :style="{'background': `linear-gradient(rgba(0, 0, 0, 0.8),rgba(0, 0, 0, 0.8)), url(${show.background})`}"
     >
       <transition name="result" enter-active-class="animated fadeInDown">
         <div class="flex flex-col justify-center items-center" v-if="showResult">
           <div class="result">
-            <h4>4</h4>
-            <p>Out Of 20</p>
+            <h4>{{trueCount}}</h4>
+            <p>Out Of {{characters.length}}</p>
           </div>
           <div class="mt-10">
-            <button class="text-white resultBtn" v-if="showResult">Look other shows</button>
+            <router-link to="/" class="text-white resultBtn" v-if="showResult">Look other shows</router-link>
           </div>
         </div>
       </transition>
@@ -22,23 +22,36 @@
       >
         <div class="pt-16 flex justify-center items-center flex-col" v-if="showContent">
           <div class="img-wrapper">
-            <img :src="character.img" class="w-full h-full object-cover" alt />
+            <img :src="character.image" class="w-full h-full object-cover" alt />
           </div>
           <div class="mt-8 answers">
             <button
-              v-for="(answer,idx) in character.answers"
-              :key="idx"
               class="btn-answer"
-              :class="{trueClass: (idx == clickedAnswer) && isAnswer, wrongClass: (idx == clickedAnswer) && !isAnswer}"
-              @click="checkAnswer(answer, character.name, idx)"
-            >{{answer}}</button>
+              :class="{trueClass: (1 == clickedAnswer) && isAnswer, wrongClass: (1 == clickedAnswer) && !isAnswer}"
+              @click="checkAnswer(character.option_1, character.name, 1)"
+            >{{character.option_1}}</button>
+            <button
+              class="btn-answer"
+              :class="{trueClass: (2 == clickedAnswer) && isAnswer, wrongClass: (2 == clickedAnswer) && !isAnswer}"
+              @click="checkAnswer(character.option_2, character.name, 2)"
+            >{{character.option_2}}</button>
+            <button
+              class="btn-answer"
+              :class="{trueClass: (3 == clickedAnswer) && isAnswer, wrongClass: (3 == clickedAnswer) && !isAnswer}"
+              @click="checkAnswer(character.option_3, character.name, 3)"
+            >{{character.option_3}}</button>
+            <button
+              class="btn-answer"
+              :class="{trueClass: (4 == clickedAnswer) && isAnswer, wrongClass: (3 == clickedAnswer) && !isAnswer}"
+              @click="checkAnswer(character.option_4, character.name, 4)"
+            >{{character.option_4}}</button>
           </div>
         </div>
       </transition>
       <transition name="status" enter-active-class="animated fadeInLeft">
         <div class="flex items-center justify-center mt-8" v-if="showStatus">
           <div
-            v-for="(n, idx) in show.characters"
+            v-for="(n, idx) in characters"
             :key="idx"
             class="bg-gray-600 w-6 h-1 rounded-sm ml-1"
             :class="{makeGreen:idx<counter}"
@@ -53,8 +66,8 @@
 </template>
 
 <script>
-import { shows } from "@/dummy";
-import { setTimeout } from "timers";
+import http from "@/http";
+
 let audio = "";
 
 export default {
@@ -62,18 +75,23 @@ export default {
     return {
       show: "",
       character: "",
+      characters: "",
+      answers: "",
+
       isAnswer: null,
       clickedAnswer: null,
       deleteStartButton: false,
       showContent: false,
       showStatus: false,
       counter: 0,
-      showResult: false
+      showResult: false,
+      trueCount: 0
     };
   },
+  computed: {},
   methods: {
     isQuizFinished() {
-      if (this.counter == this.show.characters.length) return true;
+      if (this.counter == this.characters.length) return true;
       else return false;
     },
     checkAnswer(answer, trueAnswer, idx) {
@@ -82,6 +100,7 @@ export default {
       if (answer === trueAnswer) {
         this.isAnswer = true;
         this.counter++;
+        this.trueCount++;
       } else {
         this.isAnswer = false;
         this.counter++;
@@ -112,9 +131,8 @@ export default {
       }
     },
     setCharacter() {
-      this.character = this.show.characters[this.counter];
+      this.character = this.characters[this.counter];
     },
-
     start(music) {
       this.deleteStartButton = true;
       this.showContent = true;
@@ -126,10 +144,14 @@ export default {
     }
   },
   created() {
-    if (shows) {
-      this.show = shows[this.$route.params.id - 1];
+    http.get(`/show?id=${this.$route.params.id}`).then(res => {
+      this.show = res.data;
+    });
+
+    http.get(`/characters?showID=${this.$route.params.id}`).then(res => {
+      this.characters = res.data;
       this.setCharacter();
-    }
+    });
   },
   destroyed() {
     audio.pause();
