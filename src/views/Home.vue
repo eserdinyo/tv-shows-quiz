@@ -7,6 +7,7 @@
 <script>
 import Show from "@/components/Show";
 import http from "@/http";
+import { seriesRef } from "@/firebase";
 
 // @ is an alias to /src
 
@@ -17,13 +18,18 @@ export default {
       shows: []
     };
   },
+
   components: {
     Show
   },
+  methods: {
+    async getSeries() {}
+  },
   created() {
-    http.get("/shows").then(res => {
+    this.getSeries();
+    /* http.get("/shows").then(res => {
       this.shows = res.data;
-    });
+    }); */
   }
 };
 </script>

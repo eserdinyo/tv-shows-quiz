@@ -18,5 +18,20 @@ export default new Router({
       name: 'ShowDetail',
       component: () => import('./views/ShowDetail.vue'),
     },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: () => import('./views/Admin.vue')
+    },
+    {
+      path: '/add-show',
+      name: 'AddShow',
+      component: () => import('./views/AddShow.vue')
+    },
+    {
+      path: '/admin-show/:id',
+      name: 'AdminShowDetay',
+      component: () => import('./views/AdminShowDetay.vue')
+    }
   ],
 });

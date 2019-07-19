@@ -42,7 +42,7 @@
             >{{character.option_3}}</button>
             <button
               class="btn-answer"
-              :class="{trueClass: (4 == clickedAnswer) && isAnswer, wrongClass: (3 == clickedAnswer) && !isAnswer}"
+              :class="{trueClass: (4 == clickedAnswer) && isAnswer, wrongClass: (4 == clickedAnswer) && !isAnswer}"
               @click="checkAnswer(character.option_4, character.name, 4)"
             >{{character.option_4}}</button>
           </div>
@@ -76,7 +76,6 @@ export default {
       show: "",
       character: "",
       characters: "",
-      answers: "",
 
       isAnswer: null,
       clickedAnswer: null,
@@ -100,15 +99,13 @@ export default {
       if (answer === trueAnswer) {
         this.isAnswer = true;
         this.counter++;
-        this.trueCount++;
+        this.trueCount += 1;
       } else {
         this.isAnswer = false;
         this.counter++;
       }
 
       if (this.isQuizFinished()) {
-        console.log("bitti");
-
         setTimeout(() => {
           this.showContent = false;
           this.showStatus = false;
@@ -139,8 +136,15 @@ export default {
       this.showStatus = true;
       audio = new Audio(music);
       audio.loop = true;
-      audio.volume = 0.2;
+      audio.volume = 0.5;
       audio.play();
+    },
+    shuffle(a) {
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
     }
   },
   created() {
@@ -149,7 +153,7 @@ export default {
     });
 
     http.get(`/characters?showID=${this.$route.params.id}`).then(res => {
-      this.characters = res.data;
+      this.characters = this.shuffle(res.data);
       this.setCharacter();
     });
   },
