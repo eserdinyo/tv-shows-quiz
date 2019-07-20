@@ -2,7 +2,7 @@
   <div>
     <div
       class="h-screen"
-      :style="{'background': `linear-gradient(rgba(0, 0, 0, 0.8),rgba(0, 0, 0, 0.8)), url(${show.background})`}"
+      :style="{'background-image': `linear-gradient(rgba(0, 0, 0, 0.8),rgba(0, 0, 0, 0.8)), url(${show.bgImage})`, 'background-size': 'cover'}"
     >
       <transition name="result" enter-active-class="animated fadeInDown">
         <div class="flex flex-col justify-center items-center" v-if="showResult">
@@ -66,14 +66,13 @@
 </template>
 
 <script>
-import http from "@/http";
+import { mapState } from "vuex";
 
 let audio = "";
 
 export default {
   data() {
     return {
-      show: "",
       character: "",
       characters: "",
 
@@ -87,7 +86,9 @@ export default {
       trueCount: 0
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(["show"])
+  },
   methods: {
     isQuizFinished() {
       if (this.counter == this.characters.length) return true;
@@ -148,17 +149,13 @@ export default {
     }
   },
   created() {
-    http.get(`/show?id=${this.$route.params.id}`).then(res => {
-      this.show = res.data;
-    });
-
-    http.get(`/characters?showID=${this.$route.params.id}`).then(res => {
-      this.characters = this.shuffle(res.data);
-      this.setCharacter();
-    });
+    this.$store.dispatch("getOneShow", this.$route.params.id);
   },
   destroyed() {
-    audio.pause();
+    if (audio) {
+      audio.pause();
+    }
+    this.$store.commit("CLEAR_BG_IMAGE");
   }
 };
 </script>

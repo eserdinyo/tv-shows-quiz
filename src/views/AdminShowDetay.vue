@@ -11,20 +11,14 @@
 
 <script>
 import { seriesRef } from "@/firebase";
+import { mapState } from "vuex";
 
 export default {
-  data() {
-    return {
-      show: {}
-    };
+  computed: {
+    ...mapState(["show"])
   },
   mounted() {
-    seriesRef
-      .doc(this.$route.params.id)
-      .get()
-      .then(doc => {
-        this.show = doc.data();
-      });
+    this.$store.dispatch("getOneShow", this.$route.params.id);
   }
 };
 </script>

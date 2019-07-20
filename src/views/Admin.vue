@@ -17,29 +17,15 @@
 </template>
 
 <script>
-import { seriesRef } from "@/firebase";
+import { mapState } from "vuex";
 
 export default {
   name: "Admin",
-  data() {
-    return {
-      series: []
-    };
-  },
-  methods: {
-    async getAllSeries() {
-      // GET DATA FROM FIRESTORE
-      const snapshot = await seriesRef.get();
-
-      this.series = snapshot.docs.map(res => {
-        const data = res.data();
-        data.id = res.id;
-        return data;
-      });
-    }
+  computed: {
+    ...mapState(["series"])
   },
   mounted() {
-    this.getAllSeries();
+    this.$store.dispatch('getAllSeries')
   }
 };
 </script>
