@@ -21,17 +21,22 @@ export default new Router({
     {
       path: '/admin',
       name: 'Admin',
-      component: () => import('./views/Admin.vue')
+      component: () => import('./views/admin//Admin.vue'),
     },
     {
       path: '/add-show',
       name: 'AddShow',
-      component: () => import('./views/AddShow.vue')
+      component: () => import('./views/admin/AddShow.vue'),
     },
     {
       path: '/admin-show/:id',
       name: 'AdminShowDetay',
-      component: () => import('./views/AdminShowDetay.vue')
-    }
+      component: () => import('./views/admin/AdminShowDetay.vue'),
+    },
+    {
+      path: '/add-character/:id',
+      name: 'AddCharacter',
+      component: () => import('./views/admin/AddCharacter.vue'),
+    },
   ],
 });

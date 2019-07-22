@@ -8,7 +8,7 @@
         <div class="flex flex-col justify-center items-center" v-if="showResult">
           <div class="result">
             <h4>{{trueCount}}</h4>
-            <p>Out Of {{characters.length}}</p>
+            <p>Out Of {{show.characters.length}}</p>
           </div>
           <div class="mt-10">
             <router-link to="/" class="text-white resultBtn" v-if="showResult">Look other shows</router-link>
@@ -22,36 +22,23 @@
       >
         <div class="pt-16 flex justify-center items-center flex-col" v-if="showContent">
           <div class="img-wrapper">
-            <img :src="character.image" class="w-full h-full object-cover" alt />
+            <img :src="character.imageUrl" class="w-full h-full object-cover" alt />
           </div>
           <div class="mt-8 answers">
             <button
+              v-for="(answer,idx) in character.answers"
+              :key="idx"
               class="btn-answer"
-              :class="{trueClass: (1 == clickedAnswer) && isAnswer, wrongClass: (1 == clickedAnswer) && !isAnswer}"
-              @click="checkAnswer(character.option_1, character.name, 1)"
-            >{{character.option_1}}</button>
-            <button
-              class="btn-answer"
-              :class="{trueClass: (2 == clickedAnswer) && isAnswer, wrongClass: (2 == clickedAnswer) && !isAnswer}"
-              @click="checkAnswer(character.option_2, character.name, 2)"
-            >{{character.option_2}}</button>
-            <button
-              class="btn-answer"
-              :class="{trueClass: (3 == clickedAnswer) && isAnswer, wrongClass: (3 == clickedAnswer) && !isAnswer}"
-              @click="checkAnswer(character.option_3, character.name, 3)"
-            >{{character.option_3}}</button>
-            <button
-              class="btn-answer"
-              :class="{trueClass: (4 == clickedAnswer) && isAnswer, wrongClass: (4 == clickedAnswer) && !isAnswer}"
-              @click="checkAnswer(character.option_4, character.name, 4)"
-            >{{character.option_4}}</button>
+              :class="{trueClass: (idx == clickedAnswer) && isAnswer, wrongClass: (idx == clickedAnswer) && !isAnswer}"
+              @click="checkAnswer(answer, character.name, idx)"
+            >{{answer}}</button>
           </div>
         </div>
       </transition>
       <transition name="status" enter-active-class="animated fadeInLeft">
         <div class="flex items-center justify-center mt-8" v-if="showStatus">
           <div
-            v-for="(n, idx) in characters"
+            v-for="(n, idx) in show.characters"
             :key="idx"
             class="bg-gray-600 w-6 h-1 rounded-sm ml-1"
             :class="{makeGreen:idx<counter}"
@@ -74,8 +61,6 @@ export default {
   data() {
     return {
       character: "",
-      characters: "",
-
       isAnswer: null,
       clickedAnswer: null,
       deleteStartButton: false,
@@ -91,7 +76,7 @@ export default {
   },
   methods: {
     isQuizFinished() {
-      if (this.counter == this.characters.length) return true;
+      if (this.counter == this.show.characters.length) return true;
       else return false;
     },
     checkAnswer(answer, trueAnswer, idx) {
@@ -129,7 +114,7 @@ export default {
       }
     },
     setCharacter() {
-      this.character = this.characters[this.counter];
+      this.character = this.show.characters[this.counter];
     },
     start(music) {
       this.deleteStartButton = true;
@@ -149,8 +134,11 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("getOneShow", this.$route.params.id);
+    this.$store.dispatch("getOneShow", this.$route.params.id).then(res => {
+      this.setCharacter();
+    });
   },
+  mounted() {},
   destroyed() {
     if (audio) {
       audio.pause();

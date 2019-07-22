@@ -6,6 +6,15 @@ body {
   overflow-x: hidden;
 }
 
+.input {
+  display: block;
+  padding: 10px 5px;
+  border-radius: 3px;
+  color: #191919;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
 .img-wrapper {
   width: 600px;
   height: 400px;

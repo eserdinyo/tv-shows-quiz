@@ -35,15 +35,9 @@ export default {
   },
   methods: {
     save() {
-      // ADD DATA TO FIRESTORE
-
-      seriesRef
-        .add({
-          name: this.name,
-          coverImage: this.coverImage,
-          bgImage: this.bgImage,
-          music: this.music
-        })
+      const { name, coverImage, bgImage, music } = this;
+      this.$store
+        .dispatch("addShow", { name, coverImage, bgImage, music })
         .then(res => {
           this.$router.push({ name: "Admin" });
         });
