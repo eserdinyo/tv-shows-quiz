@@ -15,6 +15,18 @@ body {
   width: 100%;
 }
 
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+}
+
+.loader img {
+  width: 100%;
+}
+
 .img-wrapper {
   width: 600px;
   height: 400px;

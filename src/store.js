@@ -25,16 +25,20 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async getAllSeries({ commit }) {
-      // GET DATA FROM FIRESTORE
-      const snapshot = await seriesRef.get();
+    getAllSeries({ commit }) {
+      return new Promise((resolve, reject) => {
+        // GET DATA FROM FIRESTORE
+        seriesRef.get().then(snapshot => {
+          const data = snapshot.docs.map(res => {
+            const data = res.data();
+            data.id = res.id;
+            return data;
+          });
 
-      const res = snapshot.docs.map(res => {
-        const data = res.data();
-        data.id = res.id;
-        return data;
-      });
-      commit('SET_SERIES', res)
+          commit('SET_SERIES', data)
+          resolve(data);
+        })
+      })
     },
     getOneShow({ commit }, id) {
       return new Promise((resolve, reject) => {

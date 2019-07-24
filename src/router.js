@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
+import Home from './pages/Home.vue';
 
 Vue.use(Router);
 
@@ -16,27 +16,27 @@ export default new Router({
     {
       path: '/show-detail/:id',
       name: 'ShowDetail',
-      component: () => import('./views/ShowDetail.vue'),
+      component: () => import('./pages/ShowDetail.vue'),
     },
     {
       path: '/admin',
       name: 'Admin',
-      component: () => import('./views/admin//Admin.vue'),
+      component: () => import('./pages/admin//Admin.vue'),
     },
     {
       path: '/add-show',
       name: 'AddShow',
-      component: () => import('./views/admin/AddShow.vue'),
+      component: () => import('./pages/admin/AddShow.vue'),
     },
     {
       path: '/admin-show/:id',
       name: 'AdminShowDetay',
-      component: () => import('./views/admin/AdminShowDetay.vue'),
+      component: () => import('./pages/admin/AdminShowDetay.vue'),
     },
     {
       path: '/add-character/:id',
       name: 'AddCharacter',
-      component: () => import('./views/admin/AddCharacter.vue'),
+      component: () => import('./pages/admin/AddCharacter.vue'),
     },
   ],
 });
