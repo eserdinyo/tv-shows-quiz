@@ -14,7 +14,7 @@
 <script>
 import Show from "@/components/Show";
 
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "home",
@@ -30,6 +30,7 @@ export default {
     Show
   },
   methods: {
+    ...mapActions(["getAllSeries"]),
     listenKeyboard() {
       document.addEventListener("keyup", e => {
         this.password.push(e.key);
@@ -47,7 +48,7 @@ export default {
     this.listenKeyboard();
 
     this.$wait.start("series");
-    await this.$store.dispatch("getAllSeries");
+    await this.getAllSeries();
     this.$wait.end("series");
   }
 };

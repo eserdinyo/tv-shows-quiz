@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   data() {
     return {
@@ -30,19 +32,16 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["addCharacter"]),
     save() {
-      this.$store
-        .dispatch("addCharacter", {
-          character: this.character,
-          id: this.$route.params.id
-        })
-        .then(res => {
-          if (res)
-            this.$router.push({
-              name: "AdminShowDetay",
-              params: { id: this.$route.params.id }
-            });
-        });
+      this.addCharacter({
+        character: this.character,
+        id: this.$route.params.id
+      });
+      this.$router.push({
+        name: "AdminShowDetay",
+        params: { id: this.$route.params.id }
+      });
     }
   }
 };

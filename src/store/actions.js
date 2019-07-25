@@ -39,9 +39,9 @@ export default {
 			imageUrl: payload.character.imageUrl,
 			answers: payload.character.answers
 		}
-		return seriesRef
+		seriesRef
 			.doc(payload.id).update({
 				characters: firebase.firestore.FieldValue.arrayUnion(data)
-			}).then(res => !res ? res : "")
+			})
 	}
 }

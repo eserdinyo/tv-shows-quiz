@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 let audio = "";
 
@@ -78,6 +78,7 @@ export default {
     ...mapState(["show"])
   },
   methods: {
+    ...mapMutations(['CLEAR_BG_IMAGE']),
     shuffle(a) {
       for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -148,7 +149,7 @@ export default {
     if (audio) {
       audio.pause();
     }
-    this.$store.commit("CLEAR_BG_IMAGE");
+    this.CLEAR_BG_IMAGE();
   }
 };
 </script>
