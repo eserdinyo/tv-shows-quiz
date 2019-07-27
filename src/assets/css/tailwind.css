@@ -20,7 +20,6 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  
 }
 
 .loader img {
@@ -33,6 +32,8 @@ body {
   border-radius: 5px;
   overflow: hidden;
 }
+
+img-wrapper
 
 .img-hover {
   transition: all 0.2s;
@@ -90,12 +91,37 @@ body {
 .resultBtn:focus {
   outline: 0;
 }
+/* @media (min-width: 768px) {
+} */
+
+.character-img {
+
+}
 
 .answers {
   width: 600px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
+}
+
+@media  (max-width: 600px) {
+  .answers {
+    grid-template-columns: 1fr;
+    width: 80%;
+  }
+
+  .img-wrapper {
+    width: auto;
+    margin: 0 10px;
+    height: 250px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+}
+
+.img-wrapper img {
+  object-fit: cover;
 }
 
 .btn-answer {

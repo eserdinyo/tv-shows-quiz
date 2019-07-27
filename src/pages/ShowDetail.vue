@@ -2,7 +2,7 @@
   <div>
     <div
       class="h-screen"
-      :style="{'background-image': `linear-gradient(rgba(0, 0, 0, 0.8),rgba(0, 0, 0, 0.8)), url(${show.bgImage})`, 'background-size': 'cover'}"
+      :style="{'background-image': `linear-gradient(rgba(0, 0, 0, 0.8),rgba(0, 0, 0, 0.8)), url(${show.bgImage})`, 'background-size': 'cover', 'background-position' : 'center'}"
     >
       <transition name="result" enter-active-class="animated fadeInDown">
         <div class="flex flex-col justify-center items-center" v-if="showResult">
@@ -20,9 +20,17 @@
         enter-active-class="animated fadeInLeft"
         leave-active-class="animated fadeOutRight"
       >
-        <div class="pt-16 flex justify-center items-center flex-col" v-if="showContent">
+        <div class="md:pt-16 flex justify-center items-center flex-col" v-if="showContent">
+          <div class="flex items-center justify-center mt-2 mb-2 md:mb-8" v-if="showStatus">
+            <div
+              v-for="(n, idx) in characters"
+              :key="idx"
+              class="bg-gray-600 w-6 h-1 rounded-sm ml-1"
+              :class="{makeGreen:idx<counter}"
+            ></div>
+          </div>
           <div class="img-wrapper">
-            <img :src="character.imageUrl" class="w-full h-full object-cover" alt />
+            <img :src="character.imageUrl" class="w-full h-full object-cover character-img" alt />
           </div>
           <div class="mt-8 answers">
             <button
@@ -35,16 +43,7 @@
           </div>
         </div>
       </transition>
-      <transition name="status" enter-active-class="animated fadeInLeft">
-        <div class="flex items-center justify-center mt-8" v-if="showStatus">
-          <div
-            v-for="(n, idx) in characters"
-            :key="idx"
-            class="bg-gray-600 w-6 h-1 rounded-sm ml-1"
-            :class="{makeGreen:idx<counter}"
-          ></div>
-        </div>
-      </transition>
+
       <transition name="button" leave-active-class="animated fadeOutDown">
         <button class="btn" @click="start(show.music)" v-if="!deleteStartButton">LET'S START</button>
       </transition>
@@ -78,7 +77,7 @@ export default {
     ...mapState(["show"])
   },
   methods: {
-    ...mapMutations(['CLEAR_BG_IMAGE']),
+    ...mapMutations(["CLEAR_BG_IMAGE"]),
     shuffle(a) {
       for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
