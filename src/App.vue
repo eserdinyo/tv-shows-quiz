@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import Header from "@/components/Header";
+import header from "@/components/Header";
 export default {
   components: {
-    Header
+    header
   }
 };
 </script>
